@@ -1,6 +1,19 @@
-build/
+# Build artifacts
 bin/
-*.o
-*.out
-results/raw/*
+build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Results: ignore everything by default
+results/**
+
+# But keep raw benchmark data
+!results/raw/
+!results/raw/*.csv
 !results/raw/.keep
+
+# Plots can be regenerated
+results/plots/
