@@ -44,7 +44,7 @@ class HashTableStriped final : public IHashTable {
   struct alignas(64) PaddedMutex {
     std::mutex mu;
   };
-  std::vector<PaddedMutex> locks_;
+  mutable std::vector<PaddedMutex> locks_;
 
   // size_ is updated under stripe locks; for simplicity, protect with a separate mutex.
   // (We could make it atomic, but this keeps reasoning straightforward for the report.)
