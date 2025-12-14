@@ -1,6 +1,3 @@
-# Usage:
-#   gnuplot -e "work='lookup'; nkeys=100000; out='results/plots/speedup_lookup_n100000.png'" plots/speedup.gp
-
 set datafile separator ","
 set terminal pngcairo size 900,650
 set output out
@@ -11,6 +8,8 @@ set xlabel "Threads"
 set ylabel "Speedup vs 1 thread"
 set title sprintf("Speedup vs Threads (work=%s, nkeys=%d)", work, nkeys)
 
+# CSV columns:
+# 1 impl, 2 work, 3 threads, 4 nkeys, 5 speedup
 plot \
-  "< awk -F, 'NR>1 && $2==\"" . work . "\" && $1==\"coarse\" && $4==" . nkeys . " {print $3, $5}' results/raw/a4_speedup_mean.csv" using 1:2 with linespoints title "coarse", \
-  "< awk -F, 'NR>1 && $2==\"" . work . "\" && $1==\"striped\" && $4==" . nkeys . " {print $3, $5}' results/raw/a4_speedup_mean.csv" using 1:2 with linespoints title "striped"
+  'results/raw/a4_speedup_mean.csv' using ( (stringcolumn(1) eq "coarse"  && stringcolumn(2) eq work && int(column(4)) == nkeys) ? column(3) : 1/0 ):( (stringcolumn(1) eq "coarse"  && stringcolumn(2) eq work && int(column(4)) == nkeys) ? column(5) : 1/0 ) with linespoints title "coarse", \
+  'results/raw/a4_speedup_mean.csv' using ( (stringcolumn(1) eq "striped" && stringcolumn(2) eq work && int(column(4)) == nkeys) ? column(3) : 1/0 ):( (stringcolumn(1) eq "striped" && stringcolumn(2) eq work && int(column(4)) == nkeys) ? column(5) : 1/0 ) with linespoints title "striped"
