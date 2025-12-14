@@ -1,0 +1,6 @@
+build/
+bin/
+*.o
+*.out
+results/raw/*
+!results/raw/.keep
